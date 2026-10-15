@@ -825,32 +825,121 @@ const advice = getRecyclingAdvice(selectedLabel);
 
         </section>
         
+
+
 <section className="impact-section">
   <div className="section-heading">
     <div>
-      <span className="eyebrow">CIRCULAR ECONOMY</span>
-      <h2>Your Potential Impact</h2>
+      <span className="eyebrow">LOOPWISE AI / IMPACT ANALYTICS</span>
+      <h2>Circular Impact Overview</h2>
+      <p className="impact-intro">
+        Material pathways identified from your waste scans.
+      </p>
     </div>
-    <span className="demo-badge">Based on identified items</span>
+    <span className="demo-badge">Live scan data</span>
   </div>
 
-  <p className="impact-intro">
-    Explore how identified materials could support reuse,
-    recycling, composting, or safer disposal. These counts
-    are estimates, not verified environmental outcomes.
-  </p>
-
-  <div className="impact-grid">
-    {circularImpact.map((item) => (
-      <div className="impact-card" key={item.name}>
-        <span className="impact-icon">{item.icon}</span>
-        <h3>{item.count}</h3>
-        <h4>{item.name}</h4>
-        <p>{item.description}</p>
+  <div className="impact-analytics">
+    <div className="impact-chart-card">
+      <div className="impact-card-heading">
+        <div>
+          <h3>Material composition</h3>
+          <p>Distribution across identified categories</p>
+        </div>
       </div>
-    ))}
+
+      <div className="impact-chart-layout">
+        <div className="impact-donut">
+          <div className="donut-placeholder">
+            <span>ITEMS</span>
+            <strong>{Object.values(materialCounts).reduce(
+              (total, count) => total + (Number(count) || 0), 0
+            )}</strong>
+            <span>ANALYZED</span>
+          </div>
+        </div>
+
+        <div className="impact-legend">
+          {[
+            { name: 'Recyclable', color: '#249765' },
+            { name: 'Reusable', color: '#397BC2' },
+            { name: 'Biodegradable', color: '#D9A52C' },
+            { name: 'Hazardous', color: '#D7655B' },
+            { name: 'Sanitary Waste', color: '#8953B8' },
+          ].map((item) => {
+            const count = Number(materialCounts[item.name]) || 0;
+            const total = Object.values(materialCounts).reduce(
+              (sum, value) => sum + (Number(value) || 0), 0
+            );
+            const percentage = total > 0
+              ? ((count / total) * 100).toFixed(1)
+              : '0.0';
+
+            return (
+              <div className="impact-legend-row" key={item.name}>
+                <span
+                  className="impact-legend-dot"
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="impact-legend-name">{item.name}</span>
+                <strong>{count}</strong>
+                <span className="impact-percentage">{percentage}%</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+
+    <div className="impact-insight-card">
+      <span className="eyebrow">CIRCULAR PATHWAYS</span>
+      <h3>From identification to action</h3>
+      <p>
+        Every identified item can inform a more appropriate
+        reuse, recovery, or disposal decision.
+      </p>
+
+      {[
+        { name: 'Recycling', category: 'Recyclable', color: '#249765' },
+        { name: 'Reuse', category: 'Reusable', color: '#397BC2' },
+        { name: 'Organic processing', category: 'Biodegradable', color: '#D9A52C' },
+        { name: 'Safe disposal', category: 'Hazardous', color: '#D7655B' },
+        { name: 'Sanitary disposal', category: 'Sanitary Waste', color: '#8953B8' },
+      ].map((item) => {
+        const count = Number(materialCounts[item.category]) || 0;
+        const total = Object.values(materialCounts).reduce(
+          (sum, value) => sum + (Number(value) || 0), 0
+        );
+        const percentage = total > 0 ? (count / total) * 100 : 0;
+
+        return (
+          <div className="pathway-row" key={item.category}>
+            <div className="pathway-label">
+              <span>{item.name}</span>
+              <strong>{percentage.toFixed(0)}%</strong>
+            </div>
+            <div className="pathway-track">
+              <div
+                className="pathway-fill"
+                style={{
+                  width: `${percentage}%`,
+                  backgroundColor: item.color,
+                }}
+              />
+            </div>
+          </div>
+        );
+      })}
+    </div>
   </div>
+
+  <p className="impact-disclaimer">
+    Estimates are based on image classifications. Actual recovery and
+    disposal options depend on material condition and local guidance.
+  </p>
 </section>
+
+
 
 
         <footer>
