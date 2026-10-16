@@ -117,7 +117,9 @@ useEffect(() => {
   localStorage.setItem('loopwise-items-processed', String(itemsProcessed));
 }, [itemsProcessed]);
   const [prediction, setPrediction] = useState(null);
-  
+const [showRewards, setShowRewards] = useState(false);
+const [showContact, setShowContact] = useState(false);
+const [darkMode, setDarkMode] = useState(false);  
 const [correctedMaterial, setCorrectedMaterial] = useState("");
 
 
@@ -199,10 +201,10 @@ const mostScannedCategory =
   const [previewImage, setPreviewImage] = useState(null);
   const [activeTab, setActiveTab] = useState('Identify Waste')
 
-  const tabs = ['Identify Waste', 'Material Flow', 'AI Recycling Guide']
+  const tabs = ['Identify Waste', 'Material Flow', 'AI Recycling Guide', 'C.Economy Impact'];
 
   return (
-    <div className="app">
+    <div className={`app ${darkMode ? "dark-mode" : ""}`}>
       <header className="navbar">
         <a className="brand" href="#">
           <span className="brand-icon">↻</span>
@@ -211,22 +213,93 @@ const mostScannedCategory =
 
         
 
-        <span className="status">
-          <span className="status-dot" />
-          Sustainability hub
-        </span>
+        
+
+<div className="auth-buttons">
+  <button
+    className="login-btn"
+    onClick={() => setShowLogin(true)}
+  >
+    Log In
+  </button>
+
+  <button
+    className="signup-btn"
+    onClick={() => setShowSignup(true)}
+  >
+    Sign Up
+  </button>
+
+  <button
+    className="rewards-btn"
+    onClick={() => setShowRewards(true)}
+  >
+    🏆 Rewards
+  </button>
+  <button
+  className="contact-btn"
+  onClick={() => setShowContact(true)}
+>
+  <span>✉</span> Contact Us
+</button>
+  <button
+  className={`theme-toggle ${darkMode ? "active" : ""}`}
+  onClick={() => setDarkMode(!darkMode)}
+  aria-label="Toggle dark mode"
+  aria-pressed={darkMode}
+>
+  <span>{darkMode ? "🌙" : "☀️"}</span>
+  <span>{darkMode ? "Dark" : "Light"}</span>
+  <span className="toggle-track">
+    <span className="toggle-knob" />
+  </span>
+</button>
+</div>
+
+
       </header>
 
       <main>
        
+
 <section className="hero">
   <div className="hero-copy">
+    <h1 className="welcome-title">Welcome To LoopWise</h1>
     <span className="eyebrow">♻ SMARTER CHOICES, LESS WASTE</span>
 
-    <h1>
-      Give waste a<br />
-      <span>second life.</span>
-    </h1>
+
+    
+
+<h1 className="door-heading">
+  <span className="door-line">
+    <span className="door-letter">G</span>
+    <span className="train-letters">
+      {"ive waste a".split("").map((letter, i) => (
+        <span
+          className="train-char"
+          key={`top-${i}`}
+          style={{ "--i": i }}
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </span>
+      ))}
+    </span>
+  </span>
+
+  <span className="door-line second-line train-letters">
+    {"second life.".split("").map((letter, i) => (
+      <span
+        className="train-char"
+        key={`bottom-${i}`}
+        style={{ "--i": i + 11 }}
+      >
+        {letter === " " ? "\u00A0" : letter}
+      </span>
+    ))}
+  </span>
+</h1>
+
+
 
     <p>
       Identify materials, discover smarter disposal choices,
@@ -283,11 +356,14 @@ const mostScannedCategory =
         onClick={() => {
           setActiveTab(tab);
 
-          const sectionIds = {
-            'Identify Waste': 'identify-waste-section',
-            'Material Flow': 'material-flow-section',
-            'AI Recycling Guide': 'recycling-guide-section',
-          };
+          
+const sectionIds = {
+  'Identify Waste': 'identify-waste-section',
+  'Material Flow': 'material-flow-section',
+  'AI Recycling Guide': 'recycling-guide-section',
+  'C.Economy Impact': 'circular-impact',
+};
+
 
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
@@ -827,7 +903,7 @@ const advice = getRecyclingAdvice(selectedLabel);
         
 
 
-<section className="impact-section">
+<section className="impact-section"  id="circular-impact">
   <div className="section-heading">
     <div>
       <span className="eyebrow">LOOPWISE AI / IMPACT ANALYTICS</span>
@@ -942,14 +1018,164 @@ const advice = getRecyclingAdvice(selectedLabel);
 
 
 
+        
         <footer>
-          <a className="brand footer-brand" href="#">↻ LoopWise<span className="brand-ai">AI</span></a>
+          <a className="brand footer-brand" href="#">
+            ↻ LoopWise<span className="brand-ai">AI</span>
+          </a>
           <p>A smarter path from waste to worth.</p>
           <span>Hackathon prototype · Simulated data</span>
         </footer>
+
+        {showRewards && (
+          <div
+            className="rewards-overlay"
+            onClick={() => setShowRewards(false)}
+          >
+            <section
+              className="rewards-panel"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="rewards-close"
+                onClick={() => setShowRewards(false)}
+                aria-label="Close rewards"
+              >
+                ✕
+              </button>
+
+              <h2>🏆 Your Sustainability Rewards</h2>
+
+              <div className="rewards-grid">
+                <div className="reward-card recyclable">
+                  <h3>♻ Recyclable</h3>
+                  <strong>+8 pts</strong>
+                  <p>Example score</p>
+                </div>
+
+                <div className="reward-card reusable">
+                  <h3>📦 Reusable</h3>
+                  <strong>+10 pts</strong>
+                  <p>Example score</p>
+                </div>
+
+                <div className="reward-card biodegradable">
+                  <h3>🍃 Biodegradable</h3>
+                  <strong>+5 pts</strong>
+                  <p>Example score</p>
+                </div>
+
+                <div className="reward-card hazardous">
+                  <h3>⚠ Hazardous</h3>
+                  <strong>+2 pts</strong>
+                  <p>Safe handling first</p>
+                </div>
+
+                <div className="reward-card sanitary">
+                  <h3>♡ Sanitary Waste</h3>
+                  <strong>+2 pts</strong>
+                  <p>Safe disposal required</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        )}
+                
+
+        
+{showContact && (
+  <div
+    className="contact-overlay"
+    onClick={() => setShowContact(false)}
+  >
+    <div
+      className="contact-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="contact-title"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        className="contact-close"
+        onClick={() => setShowContact(false)}
+        aria-label="Close Contact Us"
+      >
+        ×
+      </button>
+
+      <div className="contact-heading">
+        <span className="contact-eyebrow">
+          THE PEOPLE BEHIND LOOPWISE AI
+        </span>
+        <h2 id="contact-title">Contact Us</h2>
+        <p>Connect with us and follow our journey.</p>
+      </div>
+
+      <div className="contact-grid">
+        <article className="contact-card">
+          <div className="contact-avatar">SN</div>
+          <h3>Santrupt Nayak</h3>
+
+          <a href="mailto:santruptnayak@gmail.com">
+            ✉ Email
+          </a>
+
+          <a
+            href="https://github.com/santruptnayak-sys"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub ↗
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/santrupt-nayak-a6a75b3b3"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn ↗
+          </a>
+        </article>
+
+        <article className="contact-card">
+          <div className="contact-avatar">UT</div>
+          <h3>Umaima Tahereem</h3>
+
+          <a href="mailto:tahereemumaima@gmail.com">
+            ✉ Email
+          </a>
+
+          <a
+            href="https://github.com/umaimatahereem"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub ↗
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/umaima-tahereem-b8b17b376?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn ↗
+          </a>
+        </article>
+      </div>
+
+      <p className="contact-footer">
+        ♻ Building a more sustainable future, together.
+      </p>
+    </div>
+  </div>
+)}
+
+
       </main>
     </div>
   )
 }
+     
 
 export default App
+
